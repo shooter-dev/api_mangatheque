@@ -23,6 +23,8 @@
 # - Type         : Class (SecurityController)
 # - Namespace    : App\Controller;
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
 use App\Entity\Admin;
@@ -37,6 +39,7 @@ use Symfony\Component\Routing\Annotation\Route;
 //use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 //use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\Uid\Uuid;
 
 /**
@@ -74,5 +77,27 @@ class SecurityController extends AbstractController
         return $this->render("ui/security/registration.html.twig", [
             "form" => $form->createView()
         ]);
+    }
+
+    /**
+     * @param AuthenticationUtils $authenticationUtils
+     * @return Response
+     * @Route("/login", name="security_login")
+     */
+    public function login(AuthenticationUtils $authenticationUtils): Response
+    {
+
+
+
+        return $this->render("ui/security/login.html.twig", [
+            "last_username" => $authenticationUtils->getLastUsername(),
+            "error" => $authenticationUtils->getLastAuthenticationError()
+        ]);
+    }
+    /**
+     * @Route("/logout", name="security_logout")
+     */
+    public function logout(): void
+    {
     }
 }

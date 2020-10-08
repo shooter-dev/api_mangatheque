@@ -20,6 +20,7 @@ yarn-error.log
 .phpunit
 .phpunit.result.cache
 /phpunit.xml
+/build
 ###< symfony/phpunit-bridge ###
 
 ###> squizlabs/php_codesniffer ###
