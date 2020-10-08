@@ -1,0 +1,21 @@
+security:
+    encoders:
+        App\Entity\User:
+            algorithm: auto
+    providers:
+        users_in_memory: { memory: null }
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+        main:
+            anonymous: true
+            lazy: true
+            provider: users_in_memory
+
+    role_hierarchy:
+        ROLE_ADMIN: [ROLE_USER]
+        ROLE_UTILISATEUR: [ROLE_USER]
+    access_control:
+        # - { path: ^/admin, roles: ROLE_ADMIN }
+        # - { path: ^/profile, roles: ROLE_USER }
