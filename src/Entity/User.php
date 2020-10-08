@@ -80,6 +80,11 @@ abstract class User implements UserInterface
      * @Assert\Length(min=8)
      */
     protected ?string $plainPassword = null;
+    /**
+     * @var ForgottenPassword|null     *
+     * @ORM\Embedded(class="ForgottenPassword")
+     */
+    protected ?ForgottenPassword $forgottenPassword;
 
     /**
      * @return Uuid
@@ -176,24 +181,47 @@ abstract class User implements UserInterface
     {
         $this->plainPassword = $plainPassword;
     }
-    /**
-     * @return string|void|null
-     */
-    public function getSalt()
+
+    public function getSalt(): void
     {
     }
     /**
      * @return string
      */
-    public function getUsername()
+    public function getUsername(): string
     {
         return $this->email;
     }
-    /**
-     *
-     */
-    public function eraseCredentials()
+
+    public function eraseCredentials(): void
     {
         $this->plainPassword = null;
+    }
+
+    public function hasForgotHisPassword(): void
+    {
+        $this->forgottenPassword = new ForgottenPassword();
+    }
+
+    /**
+     * @return string
+     */
+    public function getFullName(): string
+    {
+        return sprintf("%s %s", $this->firstName, $this->lastName);
+    }
+    /**
+     * @return ForgottenPassword|null
+     */
+    public function getForgottenPassword(): ?ForgottenPassword
+    {
+        return $this->forgottenPassword;
+    }
+    /**
+     * @param ForgottenPassword|null $forgottenPassword
+     */
+    public function setForgottenPassword(?ForgottenPassword $forgottenPassword): void
+    {
+        $this->forgottenPassword = $forgottenPassword;
     }
 }

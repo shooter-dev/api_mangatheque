@@ -67,8 +67,8 @@ class UserFixtures extends Fixture
         $user->setId(Uuid::v1());
         $user->setEmail("user@shooterdev.fr");
         $user->setPassword($this->userPasswordEncoderInterface->encodePassword($user, "password"));
-        $user->setFirstName("admin");
-        $user->setLastName("admin");
+        $user->setFirstName("user");
+        $user->setLastName("Shooter");
 
         $manager->persist($user);
         $manager->flush();

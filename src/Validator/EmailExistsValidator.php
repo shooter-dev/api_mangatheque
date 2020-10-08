@@ -18,50 +18,44 @@
 # - Created      : 08/10/2020
 # - PROJECT_NAME : api_mangatheque
 # - Directory    :
-# - NAME         : LoginTest
-# - FILE_NAME    : LoginTest.php
-# - Type         : Class (LoginTest)
-# - Namespace    : App\DataFixtures;
+# - NAME         : EmailExistsValidator
+# - FILE_NAME    : EmailExistsValidator.php
+# - Type         : Class (EmailExistsValidator)
+# - Namespace    : App\Validator;
 
+declare(strict_types=1);
 
-namespace App\Tests;
+namespace App\Validator;
 
-use Generator;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\RouterInterface;
+use App\Repository\UserRepository;
+use Symfony\Component\Validator\Constraint;
+use Symfony\Component\Validator\ConstraintValidator;
+use App\Validator\EmailExists;
 
-class LoginTest extends WebTestCase
+class EmailExistsValidator extends ConstraintValidator
 {
     /**
-     * @param string $email
-     * @dataProvider provideEmails
+     * @var UserRepository
      */
-    public function testSuccessfulLogin(string $email): void
+    private UserRepository $userRepository;
+    /**
+     * EmailExistsValidator constructor.
+     * @param UserRepository $userRepository
+     */
+    public function __construct(UserRepository $userRepository)
     {
-        $client = static::createClient();
-
-        /** @var RouterInterface $router */
-        $router = $client->getContainer()->get("router");
-
-        $crawler = $client->request(Request::METHOD_GET, $router->generate("security_login"));
-
-        $form = $crawler->filter("form[name=login]")->form([
-            "email" => $email,
-            "password" => "password"
-        ]);
-
-        $client->submit($form);
-
-        $this->assertResponseStatusCodeSame(Response::HTTP_FOUND);
+        $this->userRepository = $userRepository;
     }
     /**
-     * @return Generator
+     * @param mixed $value
+     * @param Constraint $constraint
      */
-    public function provideEmails(): Generator
+    public function validate($value, Constraint $constraint)
     {
-        yield ['admin@shooterdev.fr'];
-        yield ['user'];
+        if ($value === null || $value = '' || $this->userRepository->count(["email" => $value]) > 0) {
+            return;
+        }
+        /** @var EmailExists $constraint */
+        $this->context->buildViolation($constraint->message)->addViolation();
     }
 }

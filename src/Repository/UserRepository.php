@@ -18,50 +18,47 @@
 # - Created      : 08/10/2020
 # - PROJECT_NAME : api_mangatheque
 # - Directory    :
-# - NAME         : LoginTest
-# - FILE_NAME    : LoginTest.php
-# - Type         : Class (LoginTest)
-# - Namespace    : App\DataFixtures;
+# - NAME         : UserRepository
+# - FILE_NAME    : UserRepository.php
+# - Type         : Class (UserRepository)
+# - Namespace    : App\Repository;
 
+declare(strict_types=1);
 
-namespace App\Tests;
+namespace App\Repository;
 
-use Generator;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\RouterInterface;
+use App\Entity\User;
+use Symfony\Component\Uid\Uuid;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\Persistence\ManagerRegistry;
 
-class LoginTest extends WebTestCase
+/**
+ * Class UserRepository
+ * @package App\Repository
+ * @method findOneByEmail(string $email): ?User
+ */
+class UserRepository extends ServiceEntityRepository
 {
     /**
-     * @param string $email
-     * @dataProvider provideEmails
+     * UserRepository constructor.
+     * @param ManagerRegistry $registry
      */
-    public function testSuccessfulLogin(string $email): void
+    public function __construct(ManagerRegistry $registry)
     {
-        $client = static::createClient();
-
-        /** @var RouterInterface $router */
-        $router = $client->getContainer()->get("router");
-
-        $crawler = $client->request(Request::METHOD_GET, $router->generate("security_login"));
-
-        $form = $crawler->filter("form[name=login]")->form([
-            "email" => $email,
-            "password" => "password"
-        ]);
-
-        $client->submit($form);
-
-        $this->assertResponseStatusCodeSame(Response::HTTP_FOUND);
+        parent::__construct($registry, User::class);
     }
     /**
-     * @return Generator
+     * @param Uuid $token
+     * @return User|null
+     * @throws NonUniqueResultException
      */
-    public function provideEmails(): Generator
+    public function getUserByForgottenPasswordToken(Uuid $token): ?User
     {
-        yield ['admin@shooterdev.fr'];
-        yield ['user'];
+        return $this->createQueryBuilder("u")
+            ->where("u.forgottenPassword.token = :token")
+            ->setParameter("token", $token)
+            ->getQuery()
+            ->getOneOrNullResult();
     }
 }
