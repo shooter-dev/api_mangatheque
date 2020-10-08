@@ -27,17 +27,22 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Dto\ForgottenPasswordInput;
 use App\Entity\Admin;
 use App\Entity\Utilisateur;
-use App\Form\RegistrationType;
 use App\Entity\User;
-//use App\Repository\UserRepository;
+use App\Form\ForgottenPasswordType;
+use App\Form\RegistrationType;
+use App\Form\ResetPasswordType;
+use App\Repository\UserRepository;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Address;
+use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Annotation\Route;
-//use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
-//use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\Uid\Uuid;
@@ -70,7 +75,7 @@ class SecurityController extends AbstractController
             );
             $this->getDoctrine()->getManager()->persist($user);
             $this->getDoctrine()->getManager()->flush();
-            //$this->addFlash("success", "Votre inscription a été effectuée avec succès.");
+            $this->addFlash("success", "Votre inscription a été effectuée avec succès.");
             return $this->redirectToRoute("index");
         }
 
@@ -86,9 +91,6 @@ class SecurityController extends AbstractController
      */
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
-
-
-
         return $this->render("ui/security/login.html.twig", [
             "last_username" => $authenticationUtils->getLastUsername(),
             "error" => $authenticationUtils->getLastAuthenticationError()
@@ -99,5 +101,89 @@ class SecurityController extends AbstractController
      */
     public function logout(): void
     {
+    }
+
+    /**
+     * @Route("/forgotten-password", name="security_forgotten_password")
+     * @param Request $request
+     * @param UserRepository $repository
+     * @param MailerInterface $mailer
+     * @return Response
+     */
+    public function forgottenPassword(Request $request, UserRepository $repository, MailerInterface $mailer): Response
+    {
+        $forgottenPasswordInput = new ForgottenPasswordInput();
+
+        $form = $this->createForm(ForgottenPasswordType::class, $forgottenPasswordInput)->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            /** @var User $user */
+            $user = $repository->findOneByEmail($forgottenPasswordInput->getEmail());
+            $user->hasForgotHisPassword();
+
+            $this->getDoctrine()->getManager()->flush();
+
+            $email = (new TemplatedEmail())
+                ->to(new Address($user->getEmail(), $user->getFullName()))
+                ->from("hello@mangatheque.com")
+                ->context(["forgottenPassword" => $user->getForgottenPassword()])
+                ->htmlTemplate('emails/forgotten_password.html.twig');
+            $mailer->send($email);
+
+            $this->addFlash(
+                "success",
+                "Votre demande d'oubli de mot de pass a bien été enregistrée.
+                Vous allez recevoir un email pour réinitialiser votre mot de pass"
+            );
+            return $this->redirectToRoute("security_login");
+        }
+
+        return $this->render("ui/security/forgotten_password.html.twig", [
+            "form" => $form->createView()
+        ]);
+    }
+
+    /**
+     * @Route("/reset-password/{token}", name="security_reset_password")
+     * @param string $token
+     * @param Request $request
+     * @param UserRepository $userRepository
+     * @param UserPasswordEncoderInterface $userPasswordEncoder
+     * @return Response
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function resetPassword(
+        string $token,
+        Request $request,
+        UserRepository $userRepository,
+        UserPasswordEncoderInterface $userPasswordEncoder
+    ): Response {
+        if (
+            !Uuid::isValid($token)
+            || null === ($user = $userRepository->getUserByForgottenPasswordToken(Uuid::fromString($token)))
+        ) {
+            $this->addFlash("danger", "Cette demande d'oubli de mot de passe n'existe pas.");
+            return $this->redirectToRoute("security_login");
+        }
+
+        $form = $this->createForm(ResetPasswordType::class, $user, [
+            "validation_groups" => ["password"]
+        ])->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $user->setPassword(
+                $userPasswordEncoder->encodePassword($user, $user->getPlainPassword())
+            );
+            $this->getDoctrine()->getManager()->flush();
+            $this->addFlash(
+                "success",
+                "Votre mot de passe a été modifié avec succès."
+            );
+            return $this->redirectToRoute("security_login");
+        }
+
+        return $this->render("ui/security/reset_password.html.twig", [
+            "form" => $form->createView()
+        ]);
     }
 }

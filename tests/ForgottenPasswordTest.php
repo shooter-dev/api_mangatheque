@@ -18,50 +18,71 @@
 # - Created      : 08/10/2020
 # - PROJECT_NAME : api_mangatheque
 # - Directory    :
-# - NAME         : LoginTest
-# - FILE_NAME    : LoginTest.php
-# - Type         : Class (LoginTest)
-# - Namespace    : App\DataFixtures;
+# - NAME         : ForgottenPasswordTest
+# - FILE_NAME    : ForgottenPasswordTest.php
+# - Type         : Class (ForgottenPasswordTest)
+# - Namespace    : App\Tests;
 
+declare(strict_types=1);
 
 namespace App\Tests;
 
+use App\Entity\User;
+use Doctrine\ORM\EntityManagerInterface;
 use Generator;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\RouterInterface;
 
-class LoginTest extends WebTestCase
+class ForgottenPasswordTest extends WebTestCase
 {
     /**
      * @param string $email
      * @dataProvider provideEmails
      */
-    public function testSuccessfulLogin(string $email): void
+    public function testSuccessfulForgottenPassword(string $email): void
     {
         $client = static::createClient();
 
         /** @var RouterInterface $router */
         $router = $client->getContainer()->get("router");
 
-        $crawler = $client->request(Request::METHOD_GET, $router->generate("security_login"));
+        /** @var EntityManagerInterface $entityManager */
+        $entityManager = $client->getContainer()->get("doctrine.orm.entity_manager");
 
-        $form = $crawler->filter("form[name=login]")->form([
-            "email" => $email,
-            "password" => "password"
+        $crawler = $client->request(Request::METHOD_GET, $router->generate("security_forgotten_password"));
+
+        $form = $crawler->filter("form[name=forgotten_password]")->form([
+            "forgotten_password[email]" => $email
+        ]);
+
+        $client->submit($form);
+
+        $this->assertResponseStatusCodeSame(Response::HTTP_FOUND);
+
+        /** @var User $user */
+        $user = $entityManager->getRepository(User::class)->findOneByEmail($email);
+
+        $crawler = $client->request(Request::METHOD_GET, $router->generate("security_reset_password", [
+            "token" => $user->getForgottenPassword()->getToken()
+        ]));
+
+        $form = $crawler->filter("form[name=reset_password]")->form([
+            "reset_password[plainPassword]" => "password"
         ]);
 
         $client->submit($form);
 
         $this->assertResponseStatusCodeSame(Response::HTTP_FOUND);
     }
+
     /**
      * @return Generator
      */
     public function provideEmails(): Generator
     {
         yield ['admin@shooterdev.fr'];
-        yield ['user'];
+        yield ['user@shooterdev.fr'];
     }
 }

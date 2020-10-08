@@ -1,17 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuites>
-  <testsuite name="" tests="4" assertions="4" errors="0" warnings="0" failures="0" skipped="0" time="6.939980">
-    <testsuite name="Project Test Suite" tests="4" assertions="4" errors="0" warnings="0" failures="0" skipped="0" time="6.939980">
-      <testsuite name="App\Tests\LoginTest" file="/Users/shooterdev/Projet/ShooterDev/LAB/PHP/api_mangatheque/tests/LoginTest.php" tests="2" assertions="2" errors="0" warnings="0" failures="0" skipped="0" time="5.954252">
-        <testsuite name="App\Tests\LoginTest::testSuccessfulLogin" tests="2" assertions="2" errors="0" warnings="0" failures="0" skipped="0" time="5.954252">
-          <testcase name="testSuccessfulLogin with data set #0" class="App\Tests\LoginTest" classname="App.Tests.LoginTest" file="/Users/shooterdev/Projet/ShooterDev/LAB/PHP/api_mangatheque/tests/LoginTest.php" line="41" assertions="1" time="5.905859"/>
-          <testcase name="testSuccessfulLogin with data set #1" class="App\Tests\LoginTest" classname="App.Tests.LoginTest" file="/Users/shooterdev/Projet/ShooterDev/LAB/PHP/api_mangatheque/tests/LoginTest.php" line="41" assertions="1" time="0.048394"/>
+  <testsuite name="" tests="6" assertions="8" errors="0" warnings="0" failures="0" skipped="0" time="6.688556">
+    <testsuite name="Project Test Suite" tests="6" assertions="8" errors="0" warnings="0" failures="0" skipped="0" time="6.688556">
+      <testsuite name="App\Tests\ForgottenPasswordTest" file="/Users/shooterdev/Projet/ShooterDev/LAB/PHP/api_mangatheque/tests/ForgottenPasswordTest.php" tests="2" assertions="4" errors="0" warnings="0" failures="0" skipped="0" time="5.737828">
+        <testsuite name="App\Tests\ForgottenPasswordTest::testSuccessfulForgottenPassword" tests="2" assertions="4" errors="0" warnings="0" failures="0" skipped="0" time="5.737828">
+          <testcase name="testSuccessfulForgottenPassword with data set #0" class="App\Tests\ForgottenPasswordTest" classname="App.Tests.ForgottenPasswordTest" file="/Users/shooterdev/Projet/ShooterDev/LAB/PHP/api_mangatheque/tests/ForgottenPasswordTest.php" line="44" assertions="2" time="3.507038"/>
+          <testcase name="testSuccessfulForgottenPassword with data set #1" class="App\Tests\ForgottenPasswordTest" classname="App.Tests.ForgottenPasswordTest" file="/Users/shooterdev/Projet/ShooterDev/LAB/PHP/api_mangatheque/tests/ForgottenPasswordTest.php" line="44" assertions="2" time="2.230790"/>
         </testsuite>
       </testsuite>
-      <testsuite name="App\Tests\RegistrationTest" file="/Users/shooterdev/Projet/ShooterDev/LAB/PHP/api_mangatheque/tests/RegistrationTest.php" tests="2" assertions="2" errors="0" warnings="0" failures="0" skipped="0" time="0.985728">
-        <testsuite name="App\Tests\RegistrationTest::testSuccessfulRegistration" tests="2" assertions="2" errors="0" warnings="0" failures="0" skipped="0" time="0.985728">
-          <testcase name="testSuccessfulRegistration with data set #0" class="App\Tests\RegistrationTest" classname="App.Tests.RegistrationTest" file="/Users/shooterdev/Projet/ShooterDev/LAB/PHP/api_mangatheque/tests/RegistrationTest.php" line="45" assertions="1" time="0.640558"/>
-          <testcase name="testSuccessfulRegistration with data set #1" class="App\Tests\RegistrationTest" classname="App.Tests.RegistrationTest" file="/Users/shooterdev/Projet/ShooterDev/LAB/PHP/api_mangatheque/tests/RegistrationTest.php" line="45" assertions="1" time="0.345170"/>
+      <testsuite name="App\Tests\LoginTest" file="/Users/shooterdev/Projet/ShooterDev/LAB/PHP/api_mangatheque/tests/LoginTest.php" tests="2" assertions="2" errors="0" warnings="0" failures="0" skipped="0" time="0.217603">
+        <testsuite name="App\Tests\LoginTest::testSuccessfulLogin" tests="2" assertions="2" errors="0" warnings="0" failures="0" skipped="0" time="0.217603">
+          <testcase name="testSuccessfulLogin with data set #0" class="App\Tests\LoginTest" classname="App.Tests.LoginTest" file="/Users/shooterdev/Projet/ShooterDev/LAB/PHP/api_mangatheque/tests/LoginTest.php" line="41" assertions="1" time="0.178245"/>
+          <testcase name="testSuccessfulLogin with data set #1" class="App\Tests\LoginTest" classname="App.Tests.LoginTest" file="/Users/shooterdev/Projet/ShooterDev/LAB/PHP/api_mangatheque/tests/LoginTest.php" line="41" assertions="1" time="0.039359"/>
+        </testsuite>
+      </testsuite>
+      <testsuite name="App\Tests\RegistrationTest" file="/Users/shooterdev/Projet/ShooterDev/LAB/PHP/api_mangatheque/tests/RegistrationTest.php" tests="2" assertions="2" errors="0" warnings="0" failures="0" skipped="0" time="0.733125">
+        <testsuite name="App\Tests\RegistrationTest::testSuccessfulRegistration" tests="2" assertions="2" errors="0" warnings="0" failures="0" skipped="0" time="0.733125">
+          <testcase name="testSuccessfulRegistration with data set #0" class="App\Tests\RegistrationTest" classname="App.Tests.RegistrationTest" file="/Users/shooterdev/Projet/ShooterDev/LAB/PHP/api_mangatheque/tests/RegistrationTest.php" line="45" assertions="1" time="0.279468"/>
+          <testcase name="testSuccessfulRegistration with data set #1" class="App\Tests\RegistrationTest" classname="App.Tests.RegistrationTest" file="/Users/shooterdev/Projet/ShooterDev/LAB/PHP/api_mangatheque/tests/RegistrationTest.php" line="45" assertions="1" time="0.453657"/>
         </testsuite>
       </testsuite>
     </testsuite>
