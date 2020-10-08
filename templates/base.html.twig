@@ -5,11 +5,59 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>{% block title %}Welcome!{% endblock %}</title>
     {% block stylesheets %}
-
+        {{ encore_entry_link_tags('app') }}
     {% endblock %}
 </head>
 <body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="#">Mangatheque</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#header-navbar" aria-controls="header-navbar" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="header-navbar">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="{{ path("index") }}">Accueil <span class="sr-only">(current)</span></a>
+                    </li>
+                    {% if is_granted("ROLE_USER") %}
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Mon compte
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                {% if is_granted("ROLE_ADMIN") %}
+                                    <a class="dropdown-item" href="{{ path("index") }}">mangas</a>
+                                {% elseif is_granted("ROLE_UTILISATEUR") %}
+                                    <a class="dropdown-item" href="{{ path("index") }}">Mes mangas</a>
+                                {% endif %}
+                                <a class="dropdown-item" href="{{ path("security_logout") }}">Se déconnecter</a>
+                            </div>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ path("security_login") }}">Se connecter</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                S'inscrire
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                {% if is_granted("ROLE_ADMIN") %}
+                                <a class="dropdown-item" href="{{ path("security_registration", { role: 'admin' }) }}">Ajouter un admin</a>
+                                {% endif %}
+                                <a class="dropdown-item" href="{{ path("security_registration", { role: 'utilisateur' }) }}">S'inscrire</a>
+                            </div>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
         {% block body %}{% endblock %}
-        {% block javascripts %}{% endblock %}
+    </div>
+    {% block javascripts %}{% endblock %}
+    {{ encore_entry_script_tags('app') }}
     </body>
 </html>
