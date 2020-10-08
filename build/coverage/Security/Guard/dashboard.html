@@ -2,12 +2,12 @@
 <html lang="en">
  <head>
   <meta charset="UTF-8">
-  <title>Dashboard for /Users/shooterdev/Projet/ShooterDev/LAB/PHP/api_mangatheque/src/Form</title>
+  <title>Dashboard for /Users/shooterdev/Projet/ShooterDev/LAB/PHP/api_mangatheque/src/Security/Guard</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="../_css/bootstrap.min.css" rel="stylesheet" type="text/css">
-  <link href="../_css/nv.d3.min.css" rel="stylesheet" type="text/css">
-  <link href="../_css/style.css" rel="stylesheet" type="text/css">
-  <link href="../_css/custom.css" rel="stylesheet" type="text/css">
+  <link href="../../_css/bootstrap.min.css" rel="stylesheet" type="text/css">
+  <link href="../../_css/nv.d3.min.css" rel="stylesheet" type="text/css">
+  <link href="../../_css/style.css" rel="stylesheet" type="text/css">
+  <link href="../../_css/custom.css" rel="stylesheet" type="text/css">
  </head>
  <body>
   <header>
@@ -16,8 +16,9 @@
      <div class="col-md-12">
       <nav aria-label="breadcrumb">
        <ol class="breadcrumb">
-         <li class="breadcrumb-item"><a href="../index.html">/Users/shooterdev/Projet/ShooterDev/LAB/PHP/api_mangatheque/src</a></li>
-         <li class="breadcrumb-item"><a href="index.html">Form</a></li>
+         <li class="breadcrumb-item"><a href="../../index.html">/Users/shooterdev/Projet/ShooterDev/LAB/PHP/api_mangatheque/src</a></li>
+         <li class="breadcrumb-item"><a href="../index.html">Security</a></li>
+         <li class="breadcrumb-item"><a href="index.html">Guard</a></li>
          <li class="breadcrumb-item active">(Dashboard)</li>
 
        </ol>
@@ -140,9 +141,9 @@
     </p>
    </footer>
   </div>
-  <script src="../_js/jquery.min.js" type="text/javascript"></script>
-  <script src="../_js/d3.min.js" type="text/javascript"></script>
-  <script src="../_js/nv.d3.min.js" type="text/javascript"></script>
+  <script src="../../_js/jquery.min.js" type="text/javascript"></script>
+  <script src="../../_js/d3.min.js" type="text/javascript"></script>
+  <script src="../../_js/nv.d3.min.js" type="text/javascript"></script>
   <script type="text/javascript">
 $(document).ready(function() {
   nv.addGraph(function() {
@@ -155,7 +156,7 @@ $(document).ready(function() {
       .yAxis.tickFormat(d3.format('d'));
 
     d3.select('#classCoverageDistribution svg')
-      .datum(getCoverageDistributionData([0,0,0,0,0,0,0,0,0,0,0,1], "Class Coverage"))
+      .datum(getCoverageDistributionData([0,0,0,0,0,0,0,0,0,0,1,0], "Class Coverage"))
       .transition().duration(500).call(chart);
 
     nv.utils.windowResize(chart.update);
@@ -173,7 +174,7 @@ $(document).ready(function() {
       .yAxis.tickFormat(d3.format('d'));
 
     d3.select('#methodCoverageDistribution svg')
-      .datum(getCoverageDistributionData([0,0,0,0,0,0,0,0,0,0,0,2], "Method Coverage"))
+      .datum(getCoverageDistributionData([0,0,0,0,0,0,0,0,0,1,0,7], "Method Coverage"))
       .transition().duration(500).call(chart);
 
     nv.utils.windowResize(chart.update);
@@ -223,7 +224,7 @@ $(document).ready(function() {
     chart.yAxis.axisLabel('Cyclomatic Complexity');
 
     d3.select('#classComplexity svg')
-      .datum(getComplexityData([[100,2,"<a href=\"RegistrationType.php.html#40\">App\\Form\\RegistrationType<\/a>"]], 'Class Complexity'))
+      .datum(getComplexityData([[96.15384615384616,11,"<a href=\"WebAuthenticator.php.html#48\">App\\Security\\Guard\\WebAuthenticator<\/a>"]], 'Class Complexity'))
       .transition()
       .duration(500)
       .call(chart);
@@ -247,7 +248,7 @@ $(document).ready(function() {
     chart.yAxis.axisLabel('Method Complexity');
 
     d3.select('#methodComplexity svg')
-      .datum(getComplexityData([[100,1,"<a href=\"RegistrationType.php.html#42\">App\\Form\\RegistrationType::buildForm<\/a>"],[100,1,"<a href=\"RegistrationType.php.html#63\">App\\Form\\RegistrationType::configureOptions<\/a>"]], 'Method Complexity'))
+      .datum(getComplexityData([[100,1,"<a href=\"WebAuthenticator.php.html#67\">App\\Security\\Guard\\WebAuthenticator::__construct<\/a>"],[100,2,"<a href=\"WebAuthenticator.php.html#82\">App\\Security\\Guard\\WebAuthenticator::supports<\/a>"],[100,1,"<a href=\"WebAuthenticator.php.html#91\">App\\Security\\Guard\\WebAuthenticator::getCredentials<\/a>"],[87.5,3,"<a href=\"WebAuthenticator.php.html#110\">App\\Security\\Guard\\WebAuthenticator::getUser<\/a>"],[100,1,"<a href=\"WebAuthenticator.php.html#132\">App\\Security\\Guard\\WebAuthenticator::checkCredentials<\/a>"],[100,1,"<a href=\"WebAuthenticator.php.html#141\">App\\Security\\Guard\\WebAuthenticator::getPassword<\/a>"],[100,1,"<a href=\"WebAuthenticator.php.html#151\">App\\Security\\Guard\\WebAuthenticator::onAuthenticationSuccess<\/a>"],[100,1,"<a href=\"WebAuthenticator.php.html#158\">App\\Security\\Guard\\WebAuthenticator::getLoginUrl<\/a>"]], 'Method Complexity'))
       .transition()
       .duration(500)
       .call(chart);
