@@ -117,6 +117,4 @@ class ForgottenPasswordTest extends WebTestCase
     {
         yield ["fail@email.com", "Cette adresse email n'existe pas."];
     }
-
-
 }

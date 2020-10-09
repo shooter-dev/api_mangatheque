@@ -159,7 +159,8 @@ class SecurityController extends AbstractController
         UserRepository $userRepository,
         UserPasswordEncoderInterface $userPasswordEncoder
     ): Response {
-        if (!Uuid::isValid($token)
+        if (
+            !Uuid::isValid($token)
             || null === ($user = $userRepository->getUserByForgottenPasswordToken(Uuid::fromString($token)))
         ) {
             $this->addFlash("danger", "Cette demande d'oubli de mot de passe n'existe pas.");
