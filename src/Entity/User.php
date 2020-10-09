@@ -76,12 +76,12 @@ abstract class User implements UserInterface
     protected string $password = "";
     /**
      * @var string|null
-     * @Assert\NotBlank
-     * @Assert\Length(min=8)
+     * @Assert\NotBlank(groups={"password"})
+     * @Assert\Length(min=8, groups={"password"})
      */
     protected ?string $plainPassword = null;
     /**
-     * @var ForgottenPassword|null     *
+     * @var ForgottenPassword|null
      * @ORM\Embedded(class="ForgottenPassword")
      */
     protected ?ForgottenPassword $forgottenPassword;
@@ -163,6 +163,7 @@ abstract class User implements UserInterface
      */
     public function setPassword(string $password): void
     {
+        $this->forgottenPassword = null;
         $this->password = $password;
     }
 

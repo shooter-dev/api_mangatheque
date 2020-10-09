@@ -35,6 +35,7 @@ use App\Form\ForgottenPasswordType;
 use App\Form\RegistrationType;
 use App\Form\ResetPasswordType;
 use App\Repository\UserRepository;
+use Doctrine\ORM\NonUniqueResultException;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -150,7 +151,7 @@ class SecurityController extends AbstractController
      * @param UserRepository $userRepository
      * @param UserPasswordEncoderInterface $userPasswordEncoder
      * @return Response
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws NonUniqueResultException
      */
     public function resetPassword(
         string $token,
