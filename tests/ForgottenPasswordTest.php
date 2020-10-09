@@ -85,4 +85,38 @@ class ForgottenPasswordTest extends WebTestCase
         yield ['admin@shooterdev.fr'];
         yield ['user@shooterdev.fr'];
     }
+    /**
+     * @param string $email
+     * @param string $errorMessage
+     * @dataProvider provideBadRequestsForForgottenPassword
+     */
+    public function testBadRequest(string $email, string $errorMessage): void
+    {
+        $client = static::createClient();
+
+        /** @var RouterInterface $router */
+        $router = $client->getContainer()->get("router");
+
+        $crawler = $client->request(Request::METHOD_GET, $router->generate("security_forgotten_password"));
+
+        $form = $crawler->filter("form[name=forgotten_password]")->form([
+            "forgotten_password[email]" => $email
+        ]);
+
+        $client->submit($form);
+
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+
+        $this->assertSelectorTextContains("span.form-error-message", $errorMessage);
+    }
+
+    /**
+     * @return Generator
+     */
+    public function provideBadRequestsForForgottenPassword(): Generator
+    {
+        yield ["fail@email.com", "Cette adresse email n'existe pas."];
+    }
+
+
 }
