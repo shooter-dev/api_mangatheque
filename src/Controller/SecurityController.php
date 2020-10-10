@@ -64,6 +64,7 @@ class SecurityController extends AbstractController
     public function registration(string $role, Request $request, UserPasswordEncoderInterface $encoder): Response
     {
         $user = Admin::ROLE === $role ? new Admin() : new Utilisateur();
+        $user->setId(Uuid::v4());
 
         $form = $this->createForm(RegistrationType::class, $user, [
             "validation_groups" => ["Default", "password"]
@@ -97,7 +98,6 @@ class SecurityController extends AbstractController
         ]);
     }
     /**
-     * @codeCoverageIgnore
      * @Route("/logout", name="security_logout")
      */
     public function logout(): void

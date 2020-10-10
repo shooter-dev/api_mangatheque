@@ -32,6 +32,7 @@ use App\Entity\Utilisateur;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Uid\Uuid;
 
 class UserFixtures extends Fixture
 {
@@ -53,7 +54,7 @@ class UserFixtures extends Fixture
     public function load(ObjectManager $manager)
     {
         $admin = new Admin();
-        //$admin->setId(Uuid::v4());
+        $admin->setId(Uuid::v1());
         $admin->setEmail("admin@shooterdev.fr");
         $admin->setPassword($this->userPasswordEncoderInterface->encodePassword($admin, "password"));
         $admin->setFirstName("admin");
@@ -63,7 +64,7 @@ class UserFixtures extends Fixture
         $manager->flush();
 
         $user = new Utilisateur();
-        //$user->setId(Uuid::v4());
+        $user->setId(Uuid::v1());
         $user->setEmail("user@shooterdev.fr");
         $user->setPassword($this->userPasswordEncoderInterface->encodePassword($user, "password"));
         $user->setFirstName("user");
@@ -74,6 +75,7 @@ class UserFixtures extends Fixture
 
         /*for ($i = 1; $i <= 10; $i++) {
             $user = new Utilisateur();
+            $user->setId(Uuid::v4());
             $admin->setEmail(sprintf("user%d@shooterdev.fr", $i));
             $user->setPassword($this->userPasswordEncoderInterface->encodePassword($user, "password"));
             $user->setFirstName(sprintf("user-%d", $i));

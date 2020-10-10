@@ -28,11 +28,10 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Ramsey\Uuid\Doctrine\UuidGenerator;
-use Ramsey\Uuid\UuidInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Uid\Uuid;
 
 /**
  * Class User
@@ -46,13 +45,11 @@ use Symfony\Component\Validator\Constraints as Assert;
 abstract class User implements UserInterface
 {
     /**
-     * @var UuidInterface
+     * @var Uuid
      * @ORM\Id
      * @ORM\Column(type="uuid")
-     * @ORM\GeneratedValue(strategy="CUSTOM")
-     * @ORM\CustomIdGenerator(class=UuidGenerator::class)
      */
-    protected UuidInterface $id;
+    protected Uuid $id;
     /**
      * @var string
      * @ORM\Column
@@ -90,11 +87,19 @@ abstract class User implements UserInterface
     protected ?ForgottenPassword $forgottenPassword;
 
     /**
-     * @return UuidInterface
+     * @return Uuid
      */
-    public function getId(): UuidInterface
+    public function getId(): Uuid
     {
         return $this->id;
+    }
+
+    /**
+     * @param Uuid $id
+     */
+    public function setId(Uuid $id): void
+    {
+        $this->id = $id;
     }
 
     /**
